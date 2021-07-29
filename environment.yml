@@ -2,6 +2,11 @@ name: example-environment
 channels:
   - conda-forge
 dependencies:
+  - python
   - numpy
-  - matplotlib
-
+  - pip
+  - pip:
+    - nbgitpuller
+    - sphinx-gallery
+    - pandas
+    - matplotlib
