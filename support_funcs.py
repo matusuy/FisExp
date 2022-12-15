@@ -15,7 +15,7 @@ def criterio_descarte(x, d):
     
     output : vector de datos descartados
     @author: mosorio
-    @date: 2212
+    @date: 202212
     @email: mosorio@fing.edu.uy """
     
     import numpy as np
@@ -35,7 +35,7 @@ def min_cuad(x,y,orden,labelX,labelY):
     
     output : información de interés de la regresión + coef: coeficientes obtenidos
     @author: mosorio
-    @date: 2212
+    @date: 202212
     @email: mosorio@fing.edu.uy """
     
     import numpy as np

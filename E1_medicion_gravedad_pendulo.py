@@ -11,7 +11,7 @@ Entradas (input): largo del péndulo L (en m), tiempo medido t (en s),
 Salidas (output): valor de gravedad g 
 
 @author: mosorio
-@date: 221214
+@date: 202212
 @email: mosorio@fing.edu.uy
 """
 # Librerías básicas

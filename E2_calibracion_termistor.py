@@ -10,7 +10,7 @@ Entradas (input): valores de resistencia, valores de temperatura
 Salidas (output): parámetro B, parámetro Ro
 
 @author: mosorio
-@date: 221214
+@date: 202212
 @email: mosorio@fing.edu.uy
 """
 # Librerías para trabajar
