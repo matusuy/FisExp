@@ -66,6 +66,29 @@ def min_cuad(x,y,orden,labelX,labelY):
     plt.ylabel(labelY,fontweight='bold',fontsize=12)
     plt.title('Proceso de linealización',fontweight='bold',fontsize=14)
     plt.legend()
+    plt.tight_layout()
     plt.show()
     
     return coef
+
+def graficar_datos(x, y, error_x, error_y, labelX, labelY):
+    
+    import matplotlib.pyplot as plt
+    
+    plt.figure()
+    plt.plot(x,y,'*',label='datos')
+    plt.plot(T,np.exp(coef[1])*np.exp(coef[0]*x),label='modelo obtenido')
+    plt.xlabel('T[K]',fontweight='bold',fontsize=12)
+    plt.ylabel('R [ohm] ',fontweight='bold',fontsize=12)
+    plt.legend()
+    plt.title('Modelo obtenido',fontweight='bold',fontsize=14)
+    
+# def graficar_datos_con_modelo(x, y, error_x, error_y, labelX, labelY, x_modelo, y_modelo):
+    
+# def estadistica_datos():
+    
+# def graficar_histograma():
+    
+# def graficar_boxplot:
+
+    

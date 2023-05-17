@@ -198,4 +198,4 @@ print('--------------------------------------------------------------')
 print('Valor de g hallado [m s^-2]: ' + str(g));
 print('==============================================================')
 
-FALTA DIBUJAR UNA POISSON ARRIBA DEL HISTOGRAMA DE ALGUAN COSA
+#FALTA DIBUJAR UNA POISSON ARRIBA DEL HISTOGRAMA DE ALGUAN COSA
