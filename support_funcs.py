@@ -14,6 +14,7 @@ def criterio_descarte(x, d):
             d - distancia a los datos
     
     output : vector de datos descartados
+    
     @author: mosorio
     @date: 202212
     @email: mosorio@fing.edu.uy """
@@ -24,7 +25,7 @@ def criterio_descarte(x, d):
     return x[mask]
 
 def min_cuad(x,y,orden,labelX,labelY):
-    """función que aplica el método de mínimos cuadrados para un set de datos.
+    """función que aplica el método de mínimos cuadrados para un set de datos
        La función a fitear es polinómica de cierto orden
     
     input : x - eje X de datos
@@ -34,6 +35,7 @@ def min_cuad(x,y,orden,labelX,labelY):
             labelY - etiqueta de eje Y
     
     output : información de interés de la regresión + coef: coeficientes obtenidos
+    
     @author: mosorio
     @date: 202212
     @email: mosorio@fing.edu.uy """
@@ -72,6 +74,20 @@ def min_cuad(x,y,orden,labelX,labelY):
     return coef
 
 def graficar_datos(x, y, error_x, error_y, label_x, label_y):
+    """función que grafica un conjunto de datos, junto a sus incertidumbres
+    
+    input : x - eje X de los datos a graficar
+            y - eje Y de los datos a graficar
+            error_x - incertidumbre en el eje X
+            error_y - incertidumbre en el eje Y
+            label_x - etiqueta de eje X
+            label_y - etiqueta de eje Y
+    
+    output : figura del conjunto de datos junto a sus correspondientes incertidumbres
+    
+    @author: mosorio
+    @date: 202305
+    @email: mosorio@fing.edu.uy """
     
     import matplotlib.pyplot as plt
     
@@ -81,6 +97,22 @@ def graficar_datos(x, y, error_x, error_y, label_x, label_y):
     plt.ylabel(label_y,fontweight='bold',fontsize=12)
     
 def graficar_datos_con_modelo(x, y, error_x, error_y, modelo_x, modelo_y, label_x, label_y):
+    """función que grafica un conjunto de datos, junto a sus incertidumbres y a un determinado modelo
+    
+    input : x - eje X de los datos a graficar
+            y - eje Y de los datos a graficar
+            error_x - incertidumbre en el eje X
+            error_y - incertidumbre en el eje Y
+            modelo_x - eje X del modelo
+            modelo_Y - eje Y del modelo
+            label_x - etiqueta de eje X
+            label_y - etiqueta de eje Y
+    
+    output : figura del conjunto de datos junto a sus correspondientes incertidumbres
+    
+    @author: mosorio
+    @date: 202305
+    @email: mosorio@fing.edu.uy """
     
     import matplotlib.pyplot as plt
     
@@ -92,6 +124,15 @@ def graficar_datos_con_modelo(x, y, error_x, error_y, modelo_x, modelo_y, label_
     plt.legend()
     
 def estadistica_datos(datos):
+    """función que despliega en pantalla información estadística básica de un conjunto de datos
+      
+    input : datos - datos bajo análisis
+    
+    output : parámetros estadísticos de los datos de interés
+    
+    @author: mosorio
+    @date: 202305
+    @email: mosorio@fing.edu.uy """
     
     import numpy as np
     from scipy.stats import skew
@@ -117,14 +158,30 @@ def estadistica_datos(datos):
     print('==============================================================')
     print(' ')
     
-def graficar_histograma(datos, clases, label_x, label_y):
+def graficar_histograma(datos, clases, label_x, label_y):    
+    """función que grafica un histograma de los datos que se pasan como parámetros
+       junto a una curva Gaussiana generada a través de la estadística de los mismos
+    
+    input : datos - datos bajo análisis
+            clases - cantidad de clases en que se quiere fraccionar el histograma
+            orden - orden del polinomio
+            label_x - etiqueta de eje X
+            label_y - etiqueta de eje Y
+    
+    output : figura del histograma junto a la curva Gaussiana correspondiente
+    
+    @author: mosorio
+    @date: 202305
+    @email: mosorio@fing.edu.uy """
     
     import numpy as np
     import matplotlib.pyplot as plt
     from scipy.stats import norm
     
+    plt.figure()
+    
     # Se grafica histograma con la frecuencia absoluta
-    counts, bins, _ = plt.hist(measurements, bins=clases, alpha=0.7, color='steelblue', edgecolor='black')
+    counts, bins, _ = plt.hist(datos, bins=clases, alpha=0.7, color='steelblue', edgecolor='black', label='Histograma')
 
     # Ancho de bin
     bin_width = bins[1] - bins[0]
@@ -133,25 +190,43 @@ def graficar_histograma(datos, clases, label_x, label_y):
     cant_medidas = len(datos)
     mu, sigma = norm.fit(datos)
 
-    # Generate points on x-axis for Gaussian curve
-    x = np.linspace(min(datos), max(datos), 100)
-    y = norm.pdf(x, mu, std) * bin_width * total_measurements
+    # Generación de ejes X e Y para Gaussiana
+    x = np.linspace(min(datos)*0.9, max(datos)*1.1, 200)
+    y = norm.pdf(x, mu, sigma) * bin_width * cant_medidas
 
-    # Normalize the Gaussian curve to match the data
-#    scaling_factor = counts.sum() / y.sum()
- #   y *= scaling_factor
-
-    # Plot Gaussian curve
-    plt.plot(x, y, 'r-', linewidth=2)
-
-    # Set plot labels and title
-    plt.xlabel('Measurement')
-    plt.ylabel('Absolute Frequency')
-    plt.title('Histogram with Normalized Gaussian Fit')
-
-    # Display the plot
+    # Grafica de histograma
+    plt.plot(x, y, 'r-', linewidth=2, label='Curva Gauss.')
+    plt.xlabel('Datos experimentales', fontweight='bold',fontsize=12)
+    plt.ylabel('Frecuencia absoluta', fontweight='bold',fontsize=12)
+    plt.legend()
     plt.show()
     
-# def graficar_boxplot:
+def seleccion_manual_datos(datos):
+    """función que dado un conjunto de datos, selecciona algunos para su posterior procesamiento
+
+    input : datos - datos bajo análisis
+
+    output : datos_x - eje X de los datos seleccionados
+             datos_y - eje Y de los datos seleccionados
+             
+    @author: mosorio
+    @date: 202305
+    @email: mosorio@fing.edu.uy """
+
+    import matplotlib.pyplot as plt
+    
+    plt.figure()
+    plt.plot(datos)
+    plt.show()
+
+    points = plt.ginput(n=-1, timeout=0)
+    datos_x = [point[0] for point in points]
+    datos_y = [point[1] for point in points]
+    
+    for x, y in zip(datos_x, datos_y):
+        print(f"Dato seleccionado: x={x}, y={y}")
+
+    return datos_x, datos_y
+    
 
     
