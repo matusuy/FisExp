@@ -1,17 +1,22 @@
 # -*- coding: utf-8 -*-
 """
+Instituto de Física - Facultad de Ingeniería - Universidad de la República
+This code is licensed under the Creative Commons Attribution-NonCommercial (CC BY-NC) license.
+
 support_funcs
 
-librería de soporte
+Librería con funciones de soporte para resolver los scripts principales
 
 @author: mosorio
+@email: mosorio@fing.edu.uy
 """
-def criterio_descarte(x, d): 
+
+def criterio_descarte(datos, umbral): 
     """función que aplica un criterio de descarte. todos los datos de x que estén
-       a una distancia d mayor del promedio de los datos
+       a una distancia umbral mayor del promedio de los datos
     
-    input : x - vector de datos
-            d - distancia a los datos
+    input : datos - vector de datos - requerido
+            umbral - distancia a los datos - requerido
     
     output : vector de datos descartados
     
@@ -21,18 +26,18 @@ def criterio_descarte(x, d):
     
     import numpy as np
     
-    mask = abs(x-np.mean(x))<d
-    return x[mask]
+    mask = abs(datos-np.mean(datos))<umbral
+    return datos[mask]
 
-def min_cuad(x,y,orden,labelX,labelY):
+def min_cuad(datos_x, datos_y, orden, label_x, label_y):
     """función que aplica el método de mínimos cuadrados para un set de datos
        La función a fitear es polinómica de cierto orden
     
-    input : x - eje X de datos
-            y - eje Y de datos 
-            orden - orden del polinomio
-            labelX - etiqueta de eje X
-            labelY - etiqueta de eje Y
+    input : x - eje X de datos - requerido
+            y - eje Y de datos - requerido
+            orden - orden del polinomio - requerido
+            labelX - etiqueta de eje X - requerido
+            labelY - etiqueta de eje Y - requerido
     
     output : información de interés de la regresión + coef: coeficientes obtenidos
     
@@ -44,14 +49,14 @@ def min_cuad(x,y,orden,labelX,labelY):
     import matplotlib.pyplot as plt
     
     # Proceso de Fit por Mínimos Cuadrados -> salida: coef (coeficientes), cov (matriz de covarianza)
-    coef,cov = np.polyfit(x,y,deg=orden,cov=True); 
+    coef, cov = np.polyfit(datos_x, datos_y, deg=orden, cov=True); 
     
     if orden==1:
         print('==================================')
         print('Resultados de la regresión lineal:')
         print('Pendiente: ' + str(coef[0]) + ' +- ' + str(np.sqrt(np.diag(cov))[0]))
         print('Ordenada: ' + str(coef[1]) + ' +- ' + str(np.sqrt(np.diag(cov))[1]))
-        print('R2: ' + str(np.corrcoef(x, y)[0,1]*np.corrcoef(x, y)[0,1]))
+        print('R2: ' + str(np.corrcoef(datos_x, datos_y)[0,1]*np.corrcoef(datos_x, datos_y)[0,1]))
         print('==================================')
     else:
         print('==================================')
@@ -60,12 +65,12 @@ def min_cuad(x,y,orden,labelX,labelY):
             print('Coef. orden ' + str(i) + ' : ' + str(coef[np.size(coef)-i-1]))
         print('==================================')
 
-    plt.figure(10)
-    plt.plot(x,y,'*',label='datos')
-    plt.plot(x,np.polyval(coef,x),label='fit lineal')
+    plt.figure()
+    plt.plot(datos_x, datos_y,'*',label='datos')
+    plt.plot(datos_x, np.polyval(coef,datos_x),label='fit lineal')
     plt.xticks(rotation=50)
-    plt.xlabel(labelX,fontweight='bold',fontsize=12)
-    plt.ylabel(labelY,fontweight='bold',fontsize=12)
+    plt.xlabel(label_x,fontweight='bold',fontsize=12)
+    plt.ylabel(label_y,fontweight='bold',fontsize=12)
     plt.title('Proceso de linealización',fontweight='bold',fontsize=14)
     plt.legend()
     plt.tight_layout()
@@ -73,15 +78,15 @@ def min_cuad(x,y,orden,labelX,labelY):
     
     return coef
 
-def graficar_datos(x, y, error_x, error_y, label_x, label_y):
+def graficar_datos(datos_y, label_x, label_y, **kwargs):
     """función que grafica un conjunto de datos, junto a sus incertidumbres
     
-    input : x - eje X de los datos a graficar
-            y - eje Y de los datos a graficar
-            error_x - incertidumbre en el eje X
-            error_y - incertidumbre en el eje Y
-            label_x - etiqueta de eje X
-            label_y - etiqueta de eje Y
+    input : x - eje X de los datos a graficar - opcional
+            y - eje Y de los datos a graficar - requerido
+            error_x - incertidumbre en el eje X - opcional
+            error_y - incertidumbre en el eje Y - opcional
+            label_x - etiqueta de eje X - requerido
+            label_y - etiqueta de eje Y - requerido
     
     output : figura del conjunto de datos junto a sus correspondientes incertidumbres
     
@@ -91,12 +96,25 @@ def graficar_datos(x, y, error_x, error_y, label_x, label_y):
     
     import matplotlib.pyplot as plt
     
-    plt.figure()
-    plt.plot(x,y,'*')
-    plt.xlabel(label_x,fontweight='bold',fontsize=12)
-    plt.ylabel(label_y,fontweight='bold',fontsize=12)
+    if 'datos_x' in kwargs:
+        if 'error_y' in kwargs and 'error_x' in kwargs:
+            plt.figure()
+            plt.errorbar(kwargs['datos_x'], datos_y, yerr=kwargs['error_y'], xerr = kwargs['error_x'], marker='*')
+            plt.xlabel(label_x,fontweight='bold',fontsize=12)
+            plt.ylabel(label_y,fontweight='bold',fontsize=12)
+        elif 'error_y' in kwargs:
+            plt.figure()
+            plt.errorbar(kwargs['datos_x'], datos_y, yerr=kwargs['error_y'], marker='*')
+            plt.xlabel(label_x,fontweight='bold',fontsize=12)
+            plt.ylabel(label_y,fontweight='bold',fontsize=12)
+    else:
+        plt.figure()
+        plt.plot(datos_y,'*')
+        plt.xlabel(label_x,fontweight='bold',fontsize=12)
+        plt.ylabel(label_y,fontweight='bold',fontsize=12)
+        print('Warning: no se tiene como entrada los datos en el eje horizontal ni las incertidumbres de cada eje.')
     
-def graficar_datos_con_modelo(x, y, error_x, error_y, modelo_x, modelo_y, label_x, label_y):
+def graficar_datos_con_modelo(datos_x, datos_y, modelo_x, modelo_y, label_x, label_y, **kwargs):
     """función que grafica un conjunto de datos, junto a sus incertidumbres y a un determinado modelo
     
     input : x - eje X de los datos a graficar
@@ -117,7 +135,13 @@ def graficar_datos_con_modelo(x, y, error_x, error_y, modelo_x, modelo_y, label_
     import matplotlib.pyplot as plt
     
     plt.figure()
-    plt.plot(x,y,'*',label='datos exp.')
+    if 'error_y' in kwargs and 'error_x' in kwargs:
+        plt.errorbar(datos_x, datos_y, yerr=kwargs['error_y'], xerr=kwargs['error_x'], marker='*', label='datos exp.')
+    elif 'error_y' in kwargs:
+        plt.errorbar(datos_x, datos_y, yerr=kwargs['error_y'], marker='*', label='datos exp.')
+    else:
+        plt.plot(datos_x, datos_y, '*', label='datos exp.')
+        print('Warning: no se tiene como entrada las incertidumbres de cada eje.')
     plt.plot(modelo_x, modelo_y, '--', label='modelo teórico')
     plt.xlabel(label_x,fontweight='bold',fontsize=12)
     plt.ylabel(label_y,fontweight='bold',fontsize=12)
@@ -126,7 +150,7 @@ def graficar_datos_con_modelo(x, y, error_x, error_y, modelo_x, modelo_y, label_
 def estadistica_datos(datos):
     """función que despliega en pantalla información estadística básica de un conjunto de datos
       
-    input : datos - datos bajo análisis
+    input : datos - datos bajo análisis - requerido
     
     output : parámetros estadísticos de los datos de interés
     
@@ -135,26 +159,17 @@ def estadistica_datos(datos):
     @email: mosorio@fing.edu.uy """
     
     import numpy as np
-    from scipy.stats import skew
-    
-    # Análisis estadístico
+
     print('==============================================================')
     print('Análisis estadístico de los datos de período obtenidos')
     print('--------------------------------------------------------------')
     print('Cantidad de datos obtenidos: ' + str(np.size(datos)))
-    print('Promedio de los datos obtenidos [s]: ' + str(np.mean(datos)))
-    print('Desviación estándar de los datos obtenidos [s]: ' + str(np.std(datos)))
+    print('Promedio de los datos obtenidos: ' + str(np.mean(datos)))
+    print('Desviación estándar de los datos obtenidos: ' + str(np.std(datos)))
     print('Valor mínimo: ' + str(np.min(datos)))
+    print('Índice mínimo: ' + str(datos.argmin()))
     print('Valor máximo: ' + str(np.max(datos)))
-    print('Skew de la muestra: ' + str(skew(datos)))
-    print('--------------------------------------------------------------')     
-    print('Información básica del skew:')
-    print(' ')
-    print('Si el skew es nulo o muy cercano a cero, la muestra se distribuye de manera normal')
-    print(' ')
-    print('Si skew > 0, los datos están más distribuidos hacia la parte izquierda de la cola de la distribución')
-    print(' ')
-    print('Si skew < 0, los datos están más distribuidos hacia la parte derecha de la cola de la distribución')
+    print('Índice máximo: ' + str(datos.argmax()))
     print('==============================================================')
     print(' ')
     
@@ -162,11 +177,10 @@ def graficar_histograma(datos, clases, label_x, label_y):
     """función que grafica un histograma de los datos que se pasan como parámetros
        junto a una curva Gaussiana generada a través de la estadística de los mismos
     
-    input : datos - datos bajo análisis
-            clases - cantidad de clases en que se quiere fraccionar el histograma
-            orden - orden del polinomio
-            label_x - etiqueta de eje X
-            label_y - etiqueta de eje Y
+    input : datos - datos bajo análisis - requerido
+            clases - cantidad de clases en que se quiere fraccionar el histograma - requerido
+            label_x - etiqueta de eje X - requerido
+            label_y - etiqueta de eje Y - requerido
     
     output : figura del histograma junto a la curva Gaussiana correspondiente
     
@@ -191,13 +205,13 @@ def graficar_histograma(datos, clases, label_x, label_y):
     mu, sigma = norm.fit(datos)
 
     # Generación de ejes X e Y para Gaussiana
-    x = np.linspace(min(datos)*0.9, max(datos)*1.1, 200)
+    x = np.linspace(min(datos)*1.15, max(datos)*1.15, 200)
     y = norm.pdf(x, mu, sigma) * bin_width * cant_medidas
 
     # Grafica de histograma
     plt.plot(x, y, 'r-', linewidth=2, label='Curva Gauss.')
-    plt.xlabel('Datos experimentales', fontweight='bold',fontsize=12)
-    plt.ylabel('Frecuencia absoluta', fontweight='bold',fontsize=12)
+    plt.xlabel(label_x, fontweight='bold',fontsize=12)
+    plt.ylabel(label_y, fontweight='bold',fontsize=12)
     plt.legend()
     plt.show()
     

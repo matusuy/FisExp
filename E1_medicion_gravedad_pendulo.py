@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 """
-Física Experimental 1 - Física Experimental 2
 Instituto de Física - Facultad de Ingeniería - Universidad de la República
+This code is licensed under the Creative Commons Attribution-NonCommercial (CC BY-NC) license.
 
 Script para realizar análisis estadísticos para la medición del valor de la 
 gravedad en Montevideo a partir del análisis del movimiento de un péndulo
@@ -14,6 +14,7 @@ Salidas (output): valor de gravedad g
 @date: 202212
 @email: mosorio@fing.edu.uy
 """
+
 # Librerías básicas
 import numpy as np
 import matplotlib.pyplot as plt

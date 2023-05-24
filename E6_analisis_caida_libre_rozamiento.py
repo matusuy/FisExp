@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 """
-Física Experimental 1 - Física Experimental 2
 Instituto de Física - Facultad de Ingeniería - Universidad de la República
+This code is licensed under the Creative Commons Attribution-NonCommercial (CC BY-NC) license.
 
 Script para realizar el análisis del movimiento de caída libre con rozamiento
 del aire

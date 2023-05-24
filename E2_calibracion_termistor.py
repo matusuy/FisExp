@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 """
-Física Experimental 1 - Física Experimental 2
 Instituto de Física - Facultad de Ingeniería - Universidad de la República
+This code is licensed under the Creative Commons Attribution-NonCommercial (CC BY-NC) license.
 
 Script para ejecutar la calibración de un termistor a partir de las mediciones
 de resistencia y temperatura.
@@ -13,6 +13,7 @@ Salidas (output): parámetro B, parámetro Ro
 @date: 202212
 @email: mosorio@fing.edu.uy
 """
+
 # Librerías para trabajar
 import numpy as np
 import matplotlib.pyplot as plt
