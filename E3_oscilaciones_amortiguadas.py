@@ -18,7 +18,9 @@ import numpy as np
 import matplotlib.pyplot as plt
 
 # Librería creada para el curso
-from support_funcs import min_cuad
+from support_funcs import min_cuad as min_cuad
+from support_funcs import graficar_datos as graficar_datos
+from support_funcs import seleccion_manual_datos as seleccion_manual_datos
 
 try:
     import IPython
@@ -66,15 +68,7 @@ print('Z0 equilibrio a partir de los datos obtenidos [m]: ' + str(Z0));
 print('Z0 equilibrio a partir de la ecuación de movimiento [m]: ' + str(m*g/k));
 print('==============================================================')
 
-# Figura donde se muestran los datos obtenidos
-plt.figure(1)
-plt.plot(data[:,t],data[:,dx],'*',label='datos medidos')
-plt.axhline(y=Z0, color='r', linestyle='--',label='Z0 - ref')
-plt.xlabel('tiempo [s]',fontweight='bold')
-plt.ylabel('posición [m]',fontweight='bold')
-plt.legend(loc="upper right")
-#plt.xticks(np.arange(1, np.size(data[:,t])+1, np.size(data[:,t])/10))
-plt.show()
+graficar_datos(data[:,dx], 'tiempo [s]', 'posición [m]', datos_x=data[:,t])
 
 # Corrección para extraer Z0 y así centrar el movimiento alrededor de la 
 # posición de equilibrio del sistema
@@ -82,19 +76,9 @@ dx0 = data[:,dx] - Z0;
 
 # Obtención de máximos a través del análisis gráficos de los picos
 # https://matplotlib.org/stable/gallery/event_handling/ginput_manual_clabel_sgskip.html#sphx-glr-gallery-event-handling-ginput-manual-clabel-sgskip-py
-plt.figure(2)
-plt.plot(data[:,t],dx0,'*',label='datos medidos')
-plt.xlabel('tiempo [s]',fontweight='bold')
-plt.ylabel('posición [m]',fontweight='bold')
-plt.title('Seleccionar los datos de interés con click. Para finalizar dar ENTER',fontweight='bold')
-picos = np.asarray(plt.ginput(n=-1,timeout=-1,show_clicks=True))
+graficar_datos(dx0, 'tiempo [s]', 'posición [m]', datos_x=data[:,t])
 
-plt.figure(3)
-plt.plot(picos[:,0],picos[:,1],'*')
-plt.xlabel('tiempo [s]',fontweight='bold')
-plt.ylabel('posición [m]',fontweight='bold')
-plt.legend()
-plt.title('Datos seleccionados para la regresión lineal',fontweight='bold',fontsize=14)
+picos = seleccion_manual_datos(data[:,t], dx0)
 
 print('==============================================================')
 print('Datos seleccionados: ')

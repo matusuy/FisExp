@@ -81,12 +81,12 @@ def min_cuad(datos_x, datos_y, orden, label_x, label_y):
 def graficar_datos(datos_y, label_x, label_y, **kwargs):
     """función que grafica un conjunto de datos, junto a sus incertidumbres
     
-    input : x - eje X de los datos a graficar - opcional
-            y - eje Y de los datos a graficar - requerido
-            error_x - incertidumbre en el eje X - opcional
-            error_y - incertidumbre en el eje Y - opcional
+    input : datos_y - eje Y de los datos a graficar - requerido
             label_x - etiqueta de eje X - requerido
             label_y - etiqueta de eje Y - requerido
+            datos_x - eje X de los datos a graficar - opcional
+            error_x - incertidumbre en el eje X - opcional
+            error_y - incertidumbre en el eje Y - opcional
     
     output : figura del conjunto de datos junto a sus correspondientes incertidumbres
     
@@ -107,24 +107,29 @@ def graficar_datos(datos_y, label_x, label_y, **kwargs):
             plt.errorbar(kwargs['datos_x'], datos_y, yerr=kwargs['error_y'], marker='*')
             plt.xlabel(label_x,fontweight='bold',fontsize=12)
             plt.ylabel(label_y,fontweight='bold',fontsize=12)
+        else:
+            plt.figure()
+            plt.plot(kwargs['datos_x'], datos_y, '*')
+            plt.xlabel(label_x,fontweight='bold',fontsize=12)
+            plt.ylabel(label_y,fontweight='bold',fontsize=12)
     else:
         plt.figure()
         plt.plot(datos_y,'*')
         plt.xlabel(label_x,fontweight='bold',fontsize=12)
         plt.ylabel(label_y,fontweight='bold',fontsize=12)
-        print('Warning: no se tiene como entrada los datos en el eje horizontal ni las incertidumbres de cada eje.')
+        print('Warning: para la grafica no se tienen como entradas los datos en el eje horizontal o las incertidumbres de cada eje.')
     
 def graficar_datos_con_modelo(datos_x, datos_y, modelo_x, modelo_y, label_x, label_y, **kwargs):
     """función que grafica un conjunto de datos, junto a sus incertidumbres y a un determinado modelo
     
-    input : x - eje X de los datos a graficar
-            y - eje Y de los datos a graficar
-            error_x - incertidumbre en el eje X
-            error_y - incertidumbre en el eje Y
-            modelo_x - eje X del modelo
-            modelo_Y - eje Y del modelo
-            label_x - etiqueta de eje X
-            label_y - etiqueta de eje Y
+    input : datos_x - eje X de los datos a graficar - requerido
+            datos_y - eje Y de los datos a graficar - requerido
+            modelo_x - eje X del modelo - requerido
+            modelo_Y - eje Y del modelo - requerido
+            label_x - etiqueta de eje X - requerido
+            label_y - etiqueta de eje Y - requerido
+            error_x - incertidumbre en el eje X - opcional
+            error_y - incertidumbre en el eje Y - opcional
     
     output : figura del conjunto de datos junto a sus correspondientes incertidumbres
     
@@ -141,7 +146,7 @@ def graficar_datos_con_modelo(datos_x, datos_y, modelo_x, modelo_y, label_x, lab
         plt.errorbar(datos_x, datos_y, yerr=kwargs['error_y'], marker='*', label='datos exp.')
     else:
         plt.plot(datos_x, datos_y, '*', label='datos exp.')
-        print('Warning: no se tiene como entrada las incertidumbres de cada eje.')
+        print('Warning: para la grafica no se tienen como entradas las incertidumbres de cada eje.')
     plt.plot(modelo_x, modelo_y, '--', label='modelo teórico')
     plt.xlabel(label_x,fontweight='bold',fontsize=12)
     plt.ylabel(label_y,fontweight='bold',fontsize=12)
@@ -215,10 +220,10 @@ def graficar_histograma(datos, clases, label_x, label_y):
     plt.legend()
     plt.show()
     
-def seleccion_manual_datos(datos):
+def seleccion_manual_datos(datos_x, datos_y):
     """función que dado un conjunto de datos, selecciona algunos para su posterior procesamiento
 
-    input : datos - datos bajo análisis
+    input : datos - datos bajo análisis - requerido
 
     output : datos_x - eje X de los datos seleccionados
              datos_y - eje Y de los datos seleccionados
@@ -230,17 +235,17 @@ def seleccion_manual_datos(datos):
     import matplotlib.pyplot as plt
     
     plt.figure()
-    plt.plot(datos)
+    plt.plot(datos_x, datos_y, '*')
     plt.show()
 
     points = plt.ginput(n=-1, timeout=0)
-    datos_x = [point[0] for point in points]
-    datos_y = [point[1] for point in points]
+    seleccion_x = [point[0] for point in points]
+    seleccion_y = [point[1] for point in points]
     
-    for x, y in zip(datos_x, datos_y):
+    for x, y in zip(seleccion_x, seleccion_y):
         print(f"Dato seleccionado: x={x}, y={y}")
 
-    return datos_x, datos_y
+    return seleccion_x, seleccion_y
     
 
     

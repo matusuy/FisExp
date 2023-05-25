@@ -16,8 +16,10 @@ Salidas (output): parámetro B, parámetro Ro
 
 # Librerías para trabajar
 import numpy as np
-import matplotlib.pyplot as plt
-from support_funcs import min_cuad
+
+from support_funcs import min_cuad as min_cuad
+from support_funcs import graficar_datos as graficar_datos
+from support_funcs import graficar_datos_con_modelo as graficar_datos_con_modelo
 
 try:
     import IPython
@@ -39,33 +41,17 @@ noise = np.random.normal(0,3,np.size(R))
 measData = R + noise;
 # ------------------------------- FIN INPUT ------------------------------
 
-plt.figure(1)
-plt.plot(T,measData,'*')
-plt.xlabel('T[K]',fontweight='bold',fontsize=12)
-plt.ylabel('R [ohm] ',fontweight='bold',fontsize=12)
-plt.legend()
-plt.title('Datos medidos',fontweight='bold',fontsize=14)
+graficar_datos(measData,'T[K]','R [ohm] ', datos_x=T)
 
 # Reorganizacion de datos para poder realizar la linealizacion
 # Modelo: R(T)=Ro*exp(B*(1/T-1/To)) -> CV: y=ln(R(T)); x=1/T-1/To --> y = ln(Ro)+B*x
 y = np.log(measData);
 x = (1/T)-1/To;
 
-plt.figure(2)
-plt.plot(x,y,'*')
-plt.xlabel('1/T-1/To [1/K]',fontweight='bold',fontsize=12)
-plt.xticks(rotation=50)
-plt.ylabel('ln(R(T)) [u.a.]',fontweight='bold',fontsize=12)
-plt.title('Proceso de linealización',fontweight='bold',fontsize=14)
+graficar_datos(y, '1/T-1/To [1/K]', 'ln(R(T)) [u.a.]', datos_x=x)
 
 # Proceso de Fit por Mínimos Cuadrados -> salida: coef (coeficientes)
 coef = min_cuad(x,y,1,'1/T-1/To [1/K]','ln(R(T)) [u.a.]')
 
 # Inversión del modelo a partir de los coeficientes obtenidos
-plt.figure(3)
-plt.plot(T,measData,'*',label='datos')
-plt.plot(T,np.exp(coef[1])*np.exp(coef[0]*x),label='modelo obtenido')
-plt.xlabel('T[K]',fontweight='bold',fontsize=12)
-plt.ylabel('R [ohm] ',fontweight='bold',fontsize=12)
-plt.legend()
-plt.title('Modelo obtenido',fontweight='bold',fontsize=14)
+graficar_datos_con_modelo(T, measData, T, np.exp(coef[1])*np.exp(coef[0]*x), 'T[K]', 'R [ohm] ')

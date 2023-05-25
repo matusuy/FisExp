@@ -83,7 +83,7 @@ graficar_histograma(t, nBins, 'longitud[cm]', 'frecuencia absoluta')
 # Cantidad de veces a realizar
 nIteraciones = 1
 # Cantidad de sigmas respecto de la media
-sigmas = 2
+sigmas = 2.2
 
 for i in range(0,nIteraciones):
     criterio = sigmas*np.std(t);
